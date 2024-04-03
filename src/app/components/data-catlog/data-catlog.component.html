@@ -1,0 +1,133 @@
+<div class="rightSection left">
+    <div class="breadcrumbs">
+        <a>Home</a> /
+        <a class="active_breadcrumb">Data Catlog</a>
+    </div>
+    <div class="query_sec">
+        <div class="query_Container">
+            <div class="query_Container_Item">
+                <h2>Query Builder!</h2>
+                <div class="card_form_sec">
+                    <div class="q_form_header">
+                        <div class="heading_txt">
+                            <h3>Create Query</h3>
+                        </div>
+                    </div>
+                    <div class="form_Sec form_grid">
+                     <div class="form_block">
+                            <label for="exampleFormControlInput1" class="form_label">Project Name</label>
+                            <div class="drop_down_select">
+                                <select class="form_select form_input" aria-label="Default select example">
+                                    <option selected>Select Project Name</option>
+                                    @if(entityContract){
+                                    @for(project of entityContract;track $index){
+                                    <option value="{{ project._id }}">
+                                        {{ project.projectName }}
+                                    </option>
+                                    }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <!-- <div class="form_block">
+                            <label for="date1" class="form_label">Start Date</label>
+                            <input type="date" class="form_input form_select txt_inp" id="date1" placeholder="">
+                        </div>
+                        <div class="form_block">
+                            <label for="date2" class="form_label">End Date</label>
+                            <input type="date" class="form_input form_select txt_inp" id="date2" placeholder="">
+                        </div> -->
+                        <div class="form_block">
+                            <label for="queryname" class="form_label">Query Name</label>
+                            <input #myTitle (keyup)="keyup(myTitle.value)" type="text" class="form_input form_select txt_inp" id="queryname" placeholder=" Search Query Name"
+                            >
+                        </div>
+                    </div>
+                </div>
+                <div class="card_form_sec">
+                    <div class="q_form_header">
+                        <div class="heading_txt">
+                            <h3>Query List</h3>
+                        </div>
+                        <div>
+                            <img  style="height: 25px; width: 25px" src="assets/img/refresh.png" alt="reload" (click)="refresh()">
+                        </div>
+                    </div>
+                    <div class="q_list_Container">
+                        @if(searchdata){
+                        @for(data of searchdata |paginate : {id:searchdata._id,itemsPerPage: itemsPerPage,currentPage: page,totalItems: totalItems};track $index){
+                        @defer () {
+                        <div class="row_q_list" (click)="openModal( data)">
+                            <p>{{ data.name }}</p>
+
+                            @if(data.status==1){
+
+                            <button class="q_list_btn p_btn" disabled>Processing</button>
+                            }
+                            @else if(data.status==2){
+                            <button  class="q_list_btn a_btn" data-bs-toggle="modal"
+                                data-bs-target="#editModal" disabled> Available</button>
+                            }
+                            @else if(searchdata[$index]?.status==3){
+                            <button class="q_list_btn a_btn" style="background-color: rgb(231, 66, 66); color: white" disabled>Encrypted</button>
+                            }@else{
+                            <button class="q_list_btn a_btn" style="background-color: skyblue; color: black" disabled>Modify</button>
+                            }
+
+                        </div>
+                        }
+                        @placeholder {
+                        <div>Loading..</div>
+                        }
+                        }@empty {
+                        <div>NO Content!.</div>
+                        }
+                        }
+
+
+                        <!-- <div class="q_pagination"> -->
+                            <pagination-controls class="pagi" (pageChange)="pageWiseQueryList((page = $event))" (maxSize)="maxSize"></pagination-controls>
+                        <!-- </div> -->
+                    </div>  
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade displayNone" id="editModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content q_modal_content">
+            <div class="modal-header Q_modal_header">
+                <h1 class="modal-title fs-5" id="editModalLabel">Query Response</h1>
+                <a (click)="closeModal()" data-bs-dismiss="modal" aria-label="Close"><img
+                        src="assets/img/modal-x-close.svg" alt="modal_close"></a>
+            </div>
+            <div class="modal-body q_modal_body">
+                <form action="#">
+                    <div class="form_block P_none">
+                        <label for="exampleFormControlTextarea1" class="form_label">Response</label>
+                        <div class="text_editor modal_text_editor" style="background-color:black; color:white; width: 100%;
+                        overflow-x: auto;">
+                            <pre><code  [innerHTML]="singleData"></code></pre>
+                            <!-- <textarea class="form_control form_input input_syntax inp_height"
+                                id="exampleFormControlTextarea1" rows="3" value="{{singleData}}">  </textarea> -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer modal_footer">
+                <div class="btn_groups">
+                   @if(status==true){
+                    <!-- <button class="q_btn outline_btn filled_btn" >Query  Build & Save</button> -->
+                    <button class="q_btn outline_btn filled_btn" [routerLink]="'/home/query-builder'" [routerLinkActive]="'active'" [routerLinkActiveOptions]="{exact: true}" [queryParams]="{query: this.qry}">Query Build & Save </button>
+                   }
+                    <button class="q_btn outline_btn filled_btn" (click)="downloadResponce()">Download Response</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,252 @@
+<div class="rightSection left">
+  <div class="breadcrumbs">
+    <a>Home</a> /
+    <a class="active_breadcrumb">Query Builder</a>
+  </div>
+  <div class="query_sec">
+    <div class="query_Container">
+      <div class="query_Container_Item">
+        <!-- <h2>Query Builder!</h2> -->
+        <div class="card_form_sec">
+          <!-- <div class="q_form_header">
+            <div class="heading_txt">
+              <h3>Entity Role</h3>
+            </div>
+          </div> -->
+          <div class="form_Sec">
+            <div class="form_block">
+              <label for="exampleFormControlInput1" class="form_label">Project Name</label>
+              <div class="drop_down_select">
+                <select (change)="getEntityContract($event)" class="form_select form_input"
+                  aria-label="Default select example">
+                  <option selected>Select Project Name</option>
+                  @if(entityContract){ @for(project of entityContract;track
+                  $index){
+                  <option value="{{project._id}}">
+                    {{ project.projectName }}
+                  </option>
+                  } }
+                </select>
+                <span class="arrow_down"><img src="assets/img/arrow_down.svg" alt="arrow_down" /></span>
+              </div>
+            </div>
+            <div class="form_block">
+              <label for="exampleFormControlTextarea1" class="form_label">Following Syntex</label>
+              <div class="text_editor">
+                <pre><code class="language-json " >
+            |-- actName: string (nullable = true)
+            |-- appId: string (nullable = true)
+            |-- br: string (nullable = true)
+            |-- build_type: string (nullable = true)
+            |-- client_id: string (nullable = true)
+            |-- createdOn: long (nullable = true)
+            |-- dmn: string (nullable = true)
+            |-- domain: string (nullable = true)
+            |-- dt: long (nullable = true)
+            |-- dvId: string (nullable = true)
+            |-- ip: string (nullable = true)
+            |-- isoDate: timestamp (nullable = true)
+            |-- l: long (nullable = true)
+            |-- loc: struct (nullable = true)
+            |    |-- coordinates: array (nullable = true)
+            |    |    |-- element: double (containsNull = true)
+            |    |-- type: string (nullable = true)
+            |-- map_center: string (nullable = true)
+            |-- meta_data: struct (nullable = true)
+            |    |-- api_core_version: string (nullable = true)
+            |    |-- api_kit_version: string (nullable = true)
+            |    |-- app_name: string (nullable = true)
+            |    |-- app_version: string (nullable = true)
+            |    |-- device_manufacturer: string (nullable = true)
+            |    |-- device_model: string (nullable = true)
+            |    |-- map_sdk_version: string (nullable = true)
+            |    |-- me_version: string (nullable = true)
+            |    |-- os_name: string (nullable = true)
+            |    |-- os_version: string (nullable = true)
+            |    |-- sdk_name: string (nullable = true)
+            |    |-- sdk_version: string (nullable = true)
+            |-- old: long (nullable = true)
+            |-- ref: string (nullable = true)
+            |-- referer: string (nullable = true)
+            |-- status: integer (nullable = true)
+            |-- uId: string (nullable = true)
+            |-- uName: string (nullable = true)
+            |-- updatedOn: long (nullable = true)
+            |-- url: string (nullable = true)
+                        </code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+        <div class="card_form_sec">
+          @if(this.entityContractId!=""){
+          <div class="q_form_header p_query">
+            <div class="heading_txt">
+              <h3>Create Query</h3>
+            </div>
+            <!-- <div class="btn_groups">
+                <button class="btn filled_btn">Build SQL Query</button>
+                <button class="btn outline_btn">Load SQL</button>
+              </div> -->
+          </div>
+
+          <div class="form_Sec">
+            <div class="form_block">
+              <label for="exampleFormControlInput1" class="form_label">Query Name</label>
+              <input [(ngModel)]="queryName" type="text" class="form_input form_select txt_inp"
+                id="exampleFormControlInput1" placeholder="" />
+            </div>
+            <div class="form_block">
+              <label for="exampleFormControlTextarea1" class="form_label">Enter Query</label>
+              <div class="enter_query">
+                <textarea [(ngModel)]="rawSQL" class="form_control form_textarea " id="exampleFormControlTextarea1"
+                  rows="3"></textarea>
+              </div>
+            </div>
+            <diV class="btn_groups">
+              <button (click)="onSubmitRawSQL()" class="btn filled_btn">Build SQL Query</button>
+              <input class="input-sql" accept=".sql" type='file' (change)="handleFileInput($event)" hidden />
+              <button (click)="handleInput($event)" class="btn outline_btn">Load SQL</button>
+            </diV>
+
+          </div>
+          }
+          @if(SQLHighlighted){
+          <div class="card_form_sec">
+            <div class="q_form_header p_query">
+              <div class="heading_txt">
+                <h3>SQL Query</h3>
+              </div>
+
+            </div>
+            <div class="form_Sec">
+
+              <div class="form_block " style="background-color:black; color:white; width: 100%;
+                overflow-x: auto;">
+                <!-- <label for="exampleFormControlInput1" class="form_label">Query Name</label> -->
+                <pre><code class="language-sql" [innerHTML]="SQLHighlighted"></code></pre>
+              </div>
+              <div class="btn_groups">
+                <button (click)="executeQuery()" class="q_btn outline_btn filled_btn">Execute Query</button>
+                <button (click)="downloadSQL()" class="q_btn outline_btn filled_btn">Download SQL</button>
+                <div class="dropButton">
+
+                  @if(urlData){
+
+                  <div class="drop_down q_btn filled_btn_static" (click)="openModal1()">
+                    <a>Update Query</a>
+                    <span><img src="assets/img/arrow_drop_white.svg" alt="arrow_white"></span>
+                  </div>
+                  }
+                  @else {
+                  <div class="drop_down q_btn filled_btn_static" (click)="openModal1()">
+                    <a>Schedule Query</a>
+                    <span><img src="assets/img/arrow_drop_white.svg" alt="arrow_white"></span>
+                  </div>
+                  }
+
+                  <!-- <ul class="dropdown_menu displayNone" id="dropDown">
+                      <li><a class="dropdown_item" >Save Query</a></li>
+                      <li><a class="dropdown_item" data-bs-toggle="modal"
+                          data-bs-target="#setschedule">Schedule Query</a></li>
+                    </ul> -->
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+          }
+
+          @if(isError == true){
+          <div class="card_form_sec">
+            <div class="q_form_header p_query">
+              <div class="heading_txt">
+                <h3>Error Message</h3>
+              </div>
+
+            </div>
+            <div class="form_Sec">
+
+              <div class="form_block">
+                <!-- <label for="exampleFormControlInput1" class="form_label">Query Name</label> -->
+                <input type="text" class="form_input form_select txt_inp input_syntax w-100"
+                  id="exampleFormControlInput1" placeholder="" value="{{isErrorMessage}}">
+              </div>
+
+            </div>
+          </div>
+
+          }
+
+          @if(isResponse == true){
+          <div class="card_form_sec">
+            <div class="q_form_header p_query">
+              <div class="heading_txt">
+                <h3>Response</h3>
+              </div>
+
+            </div>
+            <div class="form_Sec">
+
+              <div class="form_block text_editor">
+                <!-- <label for="exampleFormControlInput1" class="form_label">Query Name</label> -->
+                <pre><code class="language-json" [innerHTML]="isResponseMessage"></code></pre>
+              </div>
+
+            </div>
+          </div>
+          }
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- / model/ -->
+
+  <div id="setschedule" class="modal displayNone " id="exampleModal">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content q_modal_content">
+        <div class="modal-header Q_modal_header">
+          <h1 class="modal-title fs-5" id="setscheduleLabel">You want to set schedule</h1>
+          <a (click)="closeModal()" id="closeModal" aria-label="Close"><img src="assets/img/modal-x-close.svg"
+              alt="modal_close"></a>
+        </div>
+        <div class="modal-body q_modal_body">
+          <form action="#">
+            <div class="form_block">
+              <label for="date1" class="form_label">Start Date</label>
+              <!-- <input  type="datetime-local"  placeholder="" [value]="epochTodate(timestamp)"> -->
+              <input type="datetime-local" (change)="input($event)" class="form_input form_select txt_inp q_width"
+                id="date1" [value]="epochTodate(timestamp)" #datePicker><br><br>
+
+              @if(isErrorMessage){
+              <p class="form_error" id="dateError">{{isErrorMessage}}</p>
+              }
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer modal_footer">
+
+          @if(urlData){
+          <div class="btn_groups">
+            <button (click)="updateQuery()" class="q_btn outline_btn filled_btn">Update Query</button>
+          </div>
+          }
+          @else{
+          <div class="btn_groups">
+            <button (click)="saveQuery()" id="downloadResponse" class="q_btn outline_btn filled_btn">Save</button>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- model -->
+
+</div>

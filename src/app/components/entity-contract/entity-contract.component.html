@@ -1,0 +1,123 @@
+<div class="rightSection left">
+  <div class="breadcrumbs">
+    <a>Home</a> /
+    <a class="active_breadcrumb">Entity Contract</a>
+  </div>
+  <div class="query_sec">
+    <div class="query_Container">
+      <div class="query_Container_Item">
+        <h2>Entity Contract!</h2>
+        <div class="card_form_sec">
+          <div class="q_form_header">
+            <div class="heading_txt">
+              <h3>Entity Lists</h3>
+            </div>
+            <button class="q_btn filled_btn" (click)="openModal()"><span class="material-icons-outlined">
+                add
+              </span> Create New Entity Contract</button>
+          </div>
+          <div class="table_section">
+            <table>
+              <thead>
+                <tr>
+                  <th>Primary Input</th>
+                  <th>Primary Output</th>
+                  <th>Project Name</th>
+
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                @if(entityContract){
+                @for(entity of entityContract;track $index){
+                <tr>
+                  <td>{{ entity.primaryInput }}</td>
+                  <td>{{ entity.primaryOutput }}</td>
+                  <td>{{ entity.projectName }}</td>
+
+                  <td class="action-opt">
+                    <button type="button" (click)="deleteEntityContract(entityContract[$index]._id)"
+                      class="btn btn-danger">Delete</button>
+                  </td>
+                  }
+                  }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+
+  <div id="exampleModal" class="modal displayNone">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title mb-title" id="exampleModalLabel">Create New Entity Contract</h1>
+          <button id="closeModal" type="button" class="btn-close" (click)="closeModal()">
+            <span class="material-icons-outlined">close</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- <form action="" class="entity_form">
+          <div class="form_block">
+            <label for="primaryInput" class="form_label">Primary Input</label>
+            <input type="text" id="primaryInput" class="form_input">
+          </div>
+          <div class="form_block">
+            <label for="primaryOutput" class="form_label">Primary Output</label>
+            <input type="text" id="primaryOutput" class="form_input">
+          </div>
+          <div class="form_block">
+            <label for="projectName" class="form_label">Project Name</label>
+            <input type="text" id="projectName" class="form_input">
+          </div>
+        </form> -->
+          <form class="entity_form" [formGroup]="form" (ngSubmit)="saveEntityContract()">
+            <div class="form_block">
+              <h6>Primary Input:</h6>
+              <select class="form_input" id="primaryInput" formControlName="primaryInput">
+                <option value="" selected disabled>Select primaryInput</option>
+                @for(item of entity; track $index){
+                <option value={{entity[$index]?._id}}>{{entity[$index]?.projectName + " - " + entity[$index]?.entityRole
+                  +" - "+ entity[$index]?.projectName +" - "+ entity[$index]?.entityName}}</option>
+                }
+              </select>
+              @if(f['primaryInput'].touched && f['primaryInput'].invalid && f['primaryInput'].errors &&
+              f['primaryInput'].errors['required']){
+              <div class="alert alert-danger">PrimaryInput is required.</div>
+              }
+            </div>
+            <div class="form_block">
+
+
+              <h6>Primary Output:</h6>
+              <select class="form_input" id="primaryOutput" formControlName="primaryOutput">
+                <option value="" selected disabled>Select primaryOutput</option>
+                @for(item of entity; track $index){
+                <option value={{entity[$index]?._id}}>{{entity[$index]?.projectName + " - " + entity[$index]?.entityRole
+                  +" - "+ entity[$index]?.projectName +" - "+ entity[$index]?.entityName}}</option>
+                }
+              </select>
+              @if(f['primaryOutput'].touched && f['primaryOutput'].invalid && f['primaryOutput'].errors &&
+              f['primaryOutput'].errors['required']){
+              <div class="alert alert-danger">Primary Output Type is required.</div>
+              }
+            </div>
+            <br>
+
+            <div class="modal-footer mb_footer">
+              <button id="submitForm" type="submit" [disabled]="!form.valid" class="q_btn filled_btn">Submit</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- modal box  -->
+
+</div>

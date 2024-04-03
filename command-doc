@@ -1,0 +1,23 @@
+build cmd -  npm run build:dev
+run cmd - npm run start:dev / npm run start:local
+
+
+follow scripts block under package.json :-
+
+"scripts": {
+  "ng": "ng",
+  "start": "ng serve",
+  "start:local": "ng serve -c=local --port=4200 -o",
+  "start:dev": "ng serve -c=development --port=4200 -o",
+  "start:prod": "ng serve -c=production --port=4200 -o",
+  
+  "build:dev": "ng build --output-hashing=all --base-href ./ -c=development",
+  "build:prod": "ng build --output-hashing=all --base-href ./ -c=production",
+  "watch": "ng build --watch --configuration development",
+  "test": "ng test"
+},
+
+step 1 - npm run build:dev
+step 2 - go to dist/projectName/browser then .htaccess file pest and replace project name according to server like (browser to queryinterface)
+step 3 - than create queryinterface folder into zip
+step 4 - than upload on server

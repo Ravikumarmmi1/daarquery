@@ -1,0 +1,51 @@
+@if(showHeader){
+<div class="Main_queryInterface">
+    <div class="q_header">
+        <a class="q_header_logo">
+            <h1>Daar Query</h1>
+        </a>
+        <div class="q_right_control">
+            <div class="notify">
+                <ul class="n_list">
+                    <!-- <li><a><img src="assets/img/notifications.svg" alt="moon"></a></li>
+                    <li><a><img src="assets/img/moon.svg" alt="moon"></a></li> -->
+                </ul>
+            </div>
+            <div class="user_p">
+                <!-- <a><img class="user_img" style="height: 40px; width: 40px" src="assets/img/user.png" alt="user"></a> -->
+                <span  >{{user}}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="middleContainer ">
+        <div class="leftSidePannel">
+            <ul class="sideMenuList">
+                @if(featurespath){
+
+                @for(feature of filteredFeaturesPath; track $index){
+                <li>
+                    <a [routerLink]="[feature.path]" routerLinkActive="active_border ">
+                        <img src="{{feature.img}}" alt="dashboard">
+                        <p>{{feature.name}}</p>
+                    </a>
+                </li>
+                }
+            }
+                <li>
+                    <a [routerLink]="['/login']" (click)="handleLogout()">
+                        <img src="assets/img/logout.svg" alt="source">
+                        <p>Logout</p>
+                    </a>
+                </li>
+            </ul>
+            <a class="a_toggle" (click)="toggleSideNav()">
+                <img src="assets/img/arrow_toggle.svg" alt="arrow_toggle">
+            </a>
+        </div>
+    </div>
+
+
+</div>
+<!-- <app-query-builder></app-query-builder> -->
+}

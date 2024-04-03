@@ -1,0 +1,227 @@
+ <div class="rightSection  left">
+                <div class="breadcrumbs">
+                    <a href="#">Home</a> /
+                    <a href="#" class="active_breadcrumb">Entity Connection</a>
+                </div>
+                <div class="query_sec">
+                    <div class="query_Container">
+                        <div class="query_Container_Item">
+                        <h2>Entity Connection!</h2>
+                        <div class="card_form_sec">
+                            <div class="q_form_header">
+                                <div class="heading_txt">
+                                    <h3>Entity Lists</h3>
+                                </div>
+                                <button class="q_btn filled_btn " (click)="openModal()"><span class="material-icons-outlined">
+                                  add
+                                  </span> Create New Entity</button>
+                            </div>
+                           <div class="table_section">
+                            <table>
+                              <thead>
+                                <tr>
+                                  <th>Id Name</th>
+                                  <th>Entity</th>
+                                  <th>Entity Name</th>
+                                  <th>Entity URL</th>
+                                  <th>Entity Role</th>
+                                  <th>Action</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                @if(entity){
+                                  @for(item of entity;track $index){
+                                    <tr>
+                                      <td>{{item.projectName}}</td>
+                                      <td>{{item.entity}}</td>
+                                      <td>{{item.entityName}}</td>
+                                      <td>{{item.entityUrl}}</td>
+                                      <td>{{item.entityRole}}</td>
+                                      <td class="action-opt">
+                                        <button type="button" class="btn btn-primary" style="margin: 8px;" (click)="viewModel(item)">View</button>
+                                        <button [routerLink]="'/home/entity-connection'" [routerLinkActive]="'active'" [routerLinkActiveOptions]="{exact: true}" [queryParams]="{id: entity[$index]._id }" class="btn btn-primary">Edit</button> &nbsp;
+                                        <button type="button" (click)="deleteEntity(entity[$index]._id)" class="btn btn-danger">Delete</button>
+                                      </td>
+                                    </tr>
+                                
+                                  }
+                                }
+                              </tbody>
+                            </table>
+                           </div>
+                        </div>
+                    </div>
+                </div>
+
+       <!-- modal box  -->
+                <div id="exampleModal" class="modal displayNone">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title mb-title" id="exampleModalLabel">Create New Entity Connection</h1>
+                        <button (click)="closeModal()" id="closeModal" type="button" class="btn-close">
+                          <span class="material-icons-outlined">close</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+          
+                             
+                        <form class="entity_form" [formGroup]="form" (ngSubmit)="save_updateEntity()">
+                          <div class="form_block"> 
+                              <label class="form_label" for="entity">Entity:</label>
+                              <select id="entity" class="form_input" formControlName="entity" (change)="getEntity($event)" [(ngModel)]="entityId" > 
+                                <option class="form_input" value="" selected >Select Entity</option>
+                                 
+                                  <option class="form_input" value="S3">S3</option>
+                                  <option class="form_input" value="DB">DB</option>
+                              </select>
+                          </div>
+
+                          <div class="form_block">
+                              <label class="form_label" for="entityType">Entity Type:</label>
+                              <select id="entityType" class="form_input" formControlName="entityType"   >
+                                  @for(item of entityType; track $index){
+                                      <option value={{item.id}} selected>{{item.name}}</option>
+                                  }
+                              </select>
+                              @if(f['entityType'].touched && f['entityType'].invalid && f['entityType'].errors && f['entityType'].errors['required']){
+                                  <div class="alert alert-danger">Entity Type is required.</div>
+                              }
+
+                          </div>
+                          
+
+                          <div  class="form_block">
+                              <label class="form_label" for="entityName">Entity Name:</label>
+                              <input 
+                                  formControlName="entityName"
+                                  id="entityName" 
+                                  type="text" 
+                                  class="form_input"
+                                  [(ngModel)]="updateEntity.entityName" />
+
+                                  @if(f['entityName'].touched && f['entityName'].invalid && f['entityName'].errors && f['entityName'].errors['required']){
+                                      <div class="alert alert-danger">Entity Name is required.</div>
+                                  }
+                          </div>
+
+                          <div  class="form_block">
+                              <label class="form_label" for="entityUrl">Entity Url:</label>
+                              <input 
+                                  formControlName="entityUrl"
+                                  id="entityUrl" 
+                                  type="text" 
+                                  class="form_input"
+                                  [(ngModel)]="updateEntity.entityUrl" />
+
+                                  @if(f['entityUrl'].touched && f['entityUrl'].invalid && f['entityUrl'].errors && f['entityUrl'].errors['required']){
+                                      <div class="alert alert-danger">Entity Url is required.</div>
+                                  }
+                          </div>
+
+                          <div  class="form_block">
+                              <label class="form_label" for="projectName">Project Name:</label>
+                              <input 
+                                  formControlName="projectName"
+                                  id="projectName" 
+                                  type="text" 
+                                  class="form_input"
+                                  [(ngModel)]="updateEntity.projectName" />
+
+                                  @if(f['projectName'].touched && f['projectName'].invalid && f['projectName'].errors && f['projectName'].errors['required']){
+                                      <div class="alert alert-danger">Project Name is required.</div>
+                                  }
+                          </div>
+
+                          <div  class="form_block">
+                              <label class="form_label" for="entityRole">Entity Role:</label>
+                              <select formControlName="entityRole" id="entityRole"class="form_input" [(ngModel)]="updateEntity.entityRole">
+                                  <option value="" selected disabled>Select Entity Role</option>
+                                  <option value="read">Read</option>
+                                  <option value="write">Write</option>
+                              </select>
+
+                              @if(f['entityRole'].touched && f['entityRole'].invalid && f['entityRole'].errors && f['entityRole'].errors['required']){
+                                  <div class="alert alert-danger">Entity Role is required.</div>
+                              }
+                          </div>
+
+                          <div  class="form_block">
+                              <label class="form_label" for="user">User Name:</label>
+                              <input 
+                                  formControlName="user"
+                                  id="user" 
+                                  type="text" 
+                                  class="form_input"
+                                  [(ngModel)]="updateEntity.user" />
+                          </div>
+
+                          <div  class="form_block">
+                              <label class="form_label" for="password">Password:</label>
+                              <input 
+                                  formControlName="password"
+                                  id="password" 
+                                  type="text" 
+                                  class="form_input"
+                                  [(ngModel)]="updateEntity.password" />
+                          </div>
+
+
+                          <br>
+
+                          <div class="modal-footer mb_footer">
+                            <button class="q_btn filled_btn" type="submit" [disabled]="!form.valid">Submit</button>
+                          </div>
+                          
+                      </form>
+                      </div>
+                    
+                    </div>
+                  </div>
+                </div>
+                <!-- Modal -->
+
+
+                </div>
+
+      
+
+     <div class="modal fade displayNone" id="editModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content q_modal_content">
+            <div class="modal-header Q_modal_header">
+                <h1 class="modal-title fs-5" id="editModalLabel">Entity Response</h1>
+                <a (click)="closeModal2()" data-bs-dismiss="modal" aria-label="Close"><img
+                        src="assets/img/modal-x-close.svg" alt="modal_close"></a>
+            </div>
+            <div class="modal-body q_modal_body">
+                <form action="#">
+                    <div class="form_block P_none">
+                        <label for="exampleFormControlTextarea1" class="form_label">Response</label>
+                        <div class="text_editor modal_text_editor" style="background-color:black; color:white; width: 100%;
+                        overflow-x: auto;">
+                            <pre><code  [innerHTML]="singleData"></code></pre>
+                            <!-- <textarea class="form_control form_input input_syntax inp_height"
+                                id="exampleFormControlTextarea1" rows="3" value="{{singleData}}">  </textarea> -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer modal_footer">
+              <div class="btn_groups">
+                  <button class="q_btn outline_btn filled_btn" (click)="downloadResponce()">Download Response</button>
+              </div>
+          </div>
+        </div>
+    </div>
+</div>
+
+
+
+  
+
+ 
+
+
+
+
